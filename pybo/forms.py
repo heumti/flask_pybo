@@ -1,0 +1,13 @@
+from flask_wtf import FlaskForm
+from wtforms.fields.simple import StringField, TextAreaField, SubmitField
+from wtforms.validators import DataRequired, data_required
+
+
+class QuestionForm(FlaskForm):
+    subject = StringField('제목', validators=[DataRequired('제목은 필수 입력 항목입니다.')])
+    content = TextAreaField('내용', validators=[DataRequired('내용은 필수 입력 항목입니다.')])
+    submit = SubmitField('저장하기')
+
+class AnswerForm(FlaskForm):
+    content = TextAreaField("내용",validators=[data_required("내용은 필수 입력 항목입니다.")])
+    submit =SubmitField("답변등록")
