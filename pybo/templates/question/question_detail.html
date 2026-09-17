@@ -9,7 +9,8 @@
             <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2">
-                    {{ question.create_date }}
+                     <p class="mb-2">{{ question.user.username }}</p>
+                    <P>{{ question.create_date | datetime }}</P>
                 </div>
             </div>
         </div>
@@ -22,38 +23,26 @@
             <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2">
-                    {{ answer.create_date }}
+                    <p class="mb-2 text-start">{{ answer.user.username }}</p>
+                    <p>{{ answer.create_date|datetime }}</p>
                 </div>
             </div>
         </div>
     </div>
     {% endfor %}
-      <!-- 답변 등록 -->
-    <form action="{{ url_for('answer.create', question_id=question.id) }}"
-      method="post"
-      class="my-3"
-      novalidate>
+    <!-- 답변 등록 -->
+    <form action="{{ url_for('answer.create', question_id=question.id) }}" method="post" class="my-3" novalidate>
+        <!-- 브라우저에 있는 csrf_token확인 -->
+        {{ form.csrf_token }}
+        {% include 'form_errors.html' %}
 
-    {{ form.csrf_token }}
+        <div class="mb-3">
 
-    {% if form.errors %}
-    <div class="alert alert-danger" role="alert">
-        {% for field, errors in form.errors.items() %}
-        <strong>{{ form[field].label }}</strong>
-        <ul>
-            {% for error in errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <div class="mb-3">
-        {{ form.content(class='form-control', rows='10') }}
-    </div>
-
-    <input type="submit" value="답변등록" class="btn btn-primary">
-
+            {{ form.content(class='form-control', rows='5' ,disabled=(not g.user)) }}
+            <!-- <textarea name="content" id="content" class="form-control" rows="5"></textarea>-->
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+        <!-- <input type="submit" value="답변등록" class="btn btn-primary">-->
     </form>
+</div>
 {% endblock %}
